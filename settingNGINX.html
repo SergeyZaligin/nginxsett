@@ -12,6 +12,33 @@
 		</p>
 		<h4>Добавьте следующее содержание:</h4>
 		<p>
+			<strong>/etc/nginx/ssl.conf</strong><br>
+			<pre>
+				ssl     on;
+				ssl_protocols           SSLv3 TLSv1;
+				ssl_certificate         /etc/letsencrypt/live/mysite.ru/fullchain.pem;
+				ssl_certificate_key     /etc/letsencrypt/live/mysite.ru/privkey.pem;
+
+			</pre>
+		</p>
+		<p>
+			<pre>
+				server {
+					listen 443;
+					include /etc/nginx/ssl.conf;
+					server_name agencytop.ru www.agencytop.ru;
+					location / {
+						proxy_pass http://localhost:3777;
+						proxy_http_version 1.1;
+						proxy_set_header Upgrade $http_upgrade;
+						proxy_set_header Connection 'upgrade';
+						proxy_set_header Host $host;
+						proxy_cache_bypass $http_upgrade;
+					}
+				}
+			</pre>
+		</p>
+		<p>
 			server {
 				listen 80;
 				server_name your-domain.com www.your-domain.com;
@@ -42,6 +69,41 @@
 		<p>
 			nginx -t <br>
 			systemctl restart nginx
+		</p>
+	</div>
+	<div>
+		<h3>Deploy files in ssl</h3>
+		<p>
+			sudo scp site_private.key site.ru_rootCA.crt root@185.26.120.111:/ <br>
+			mv site.ru_private.key site.ru_rootCA.crt /etc/nginx/ssl
+		</p>
+	</div>
+	<div>
+		<h1>СОЗДАНИЕ СЕРТИФИКАТА LET’S ENCRYPT ДЛЯ NGINX В DEBIAN 9</h1>
+		<h3>
+			1: Установка Certbot
+		</h3>
+		<p>
+			Чтобы добавить этот репозиторий, откройте /etc/apt/sources.list:
+			<br>
+			<strong>nano /etc/apt/sources.list</strong><br>
+			<p>
+				deb http://deb.debian.org/debian stretch-backports main contrib non-free
+				deb-src http://deb.debian.org/debian stretch-backports main contrib non-free
+			</p>
+			<p>apt update</p>
+		</p>
+		<h3>Теперь установите пакет certbot для Nginx:</h3>
+		<p>
+			apt install python-certbot-nginx -t stretch-backports
+		</p>
+		<h3>Получение SSL-сертификата</h3>
+		<p>
+			certbot --nginx -d example.com -d www.example.com
+		</p>
+		<h3>Проверка автоматического обновления сертификата</h3>
+		<p>
+			certbot renew --dry-run
 		</p>
 	</div>
 </body>
