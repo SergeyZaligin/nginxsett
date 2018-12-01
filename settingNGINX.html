@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>nginx - nano /var/www/mydomain.ru/index.html</title>
+</head>
+<body>
+	<div>
+		<h3>Cоздадим новый блок сервера по следующему адресу:</h3>
+		<p>
+			nano /etc/nginx/sites-available/mydomain.ru.conf
+		</p>
+		<h4>Добавьте следующее содержание:</h4>
+		<p>
+			server {
+				listen 80;
+				server_name your-domain.com www.your-domain.com;
+				location / {
+					proxy_pass http://localhost:{YOUR_PORT};
+					proxy_http_version 1.1;
+					proxy_set_header Upgrade $http_upgrade;
+					proxy_set_header Connection 'upgrade';
+					proxy_set_header Host $host;
+					proxy_cache_bypass $http_upgrade;
+				}
+			}
+		</p>
+	</div>
+	
+	<div>
+		<div>
+			<h3>
+				Сохраните файл. Для того, чтобы активировать блок сервера необходимо создать символьную ссылку с помощью следующей команды:
+			</h3>
+			<p>
+				ln -s /etc/nginx/sites-available/mydomain.ru.conf /etc/nginx/sites-enabled/mydomain.ru.conf
+			</p>
+		</div>
+	</div>
+	<div>
+		<h3>Проверка конфигурации Nginx и перезагрузка Nginx:</h3>
+		<p>
+			nginx -t <br>
+			systemctl restart nginx
+		</p>
+	</div>
+</body>
+</html>
