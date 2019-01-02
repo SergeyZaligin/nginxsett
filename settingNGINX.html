@@ -160,6 +160,15 @@
 
 	</pre>
 	</div>
+	<div>
+		pm2 start www
+	</div>
+	<div>
+		cat renew.sh
+systemctl stop nginx
+certbot certonly --force-renew --standalone --email your_mail@gmail.com -d your-domain.com
+systemctl start nginx
+	</div>
 </body>
 </html>
 
