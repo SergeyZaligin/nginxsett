@@ -12,6 +12,8 @@
 			TCPKeepAlive yes
 			ClientAliveInterval 15
 			ClientAliveCountMax 5
+
+			service ssh restart
 		</li>
 		<li>
 			NODEJS
@@ -33,6 +35,16 @@
 		<li>
 			apt-get install nginx
 			systemctl enable nginx
+		</li>
+		<li>
+			Cerbot
+			nano /etc/apt/sources.list
+			deb http://deb.debian.org/debian stretch-backports main contrib non-free
+			deb-src http://deb.debian.org/debian stretch-backports main contrib non-free
+			--------
+			sudo apt update
+			apt install python-certbot-nginx -t stretch-backports
+			systemctl reload nginx
 		</li>
 	</ul>
 </body>
