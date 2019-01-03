@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>DebianSetting</title>
+</head>
+<body>
+	<ul>
+		<li>apt-get update && apt-get upgrade -y</li>
+		<li>
+			nano /etc/ssh/sshd_config <br>
+			TCPKeepAlive yes
+			ClientAliveInterval 15
+			ClientAliveCountMax 5
+		</li>
+		<li>
+			NODEJS
+			apt install curl <br>
+			cd ~
+			curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh
+			bash nodesource_setup.sh
+			apt install nodejs
+			nodejs -v
+		</li>
+		<li>
+			GIT
+			apt install git
+		</li>
+		<li>
+			npm i -g pm2
+			npm i -g webpack
+		</li>
+		<li>
+			apt-get install nginx
+			systemctl enable nginx
+		</li>
+	</ul>
+</body>
+</html>

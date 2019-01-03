@@ -5,6 +5,72 @@
 	<title>nginx - nano /var/www/mydomain.ru/index.html</title>
 </head>
 <body>
+	<ul>
+		<li>
+			запускается автоматически после перезагрузки сервера
+			systemctl enable nginx
+		</li>
+		<li>
+			systemctl start nginx 
+			systemctl stop nginx
+			systemctl restart nginx
+		</li>
+		<li>
+			Основной файл конфигурации Nginx расположен в /etc/nginx/nginx.conf
+		</li>
+		<li>
+			создать новый блок сервера для нового домена mydomain.ru и установить его корень документа в /var/www/mydomain.ru
+			mkdir -p /var/www/mydomain.ru
+		</li>
+		<li>
+			создайть файл index.html внутри этого каталога
+			nano /var/www/mydomain.ru/index.html
+			<pre>
+				<!DOCTYPE html>
+				<html>
+				<head>
+				 <title>mydomain.ru</title>
+				</head>
+				<body>
+				 <h1>Добро пожаловать на mydomain.ru</h1>
+				 <p>Это тестовый блок сервера mydomain.ru.</p>
+				</body>
+				</html>
+			</pre>
+		</li>
+		<li>
+			создадим новый блок сервера по следующему адресу:
+			nano /etc/nginx/sites-available/mydomain.ru.conf
+			<pre>
+				server {
+				       listen 80;
+				       listen [::]:80;
+
+				       server_name mydomain.ru www.mydomain.ru;
+
+				       root /var/www/mydomain.ru;
+				       index index.html;
+
+				       location / {
+				               try_files $uri $uri/ =404;
+				       }
+				}
+			</pre>
+		</li>
+		<li>
+			Сохраните файл. Для того, чтобы активировать блок сервера необходимо создать символьную ссылку с помощью следующей команды:
+			ln -s /etc/nginx/sites-available/mydomain.ru.conf /etc/nginx/sites-enabled/mydomain.ru.conf
+
+		</li>
+		<li>
+			Проверка конфигурации Nginx и перезагрузка Nginx:
+			nginx -t
+			systemctl restart nginx
+		</li>
+		<li></li>
+		<li></li>
+	</ul>
+	<p>========================================================================</p>
 	<div>
 		<h3>Cоздадим новый блок сервера по следующему адресу:</h3>
 		<p>
