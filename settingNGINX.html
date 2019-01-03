@@ -79,6 +79,7 @@
 		<h4>Добавьте следующее содержание:</h4>
 		<p>
 			<strong>/etc/nginx/ssl.conf</strong><br>
+			Один для всех
 			<pre>
 				ssl     on;
 				ssl_protocols           SSLv3 TLSv1;
@@ -199,17 +200,17 @@
 	<h3>Full Settings in nano /etc/nginx/sites-available/mydomain.ru.conf</h3>
 	<pre>
 		server {
-		        listen 80;
-		        server_name agencytop.ru www.agencytop.ru;
-		        return 301 https://$host$request_uri;
+	        listen 80;
+	        server_name about-eat.ru www.about-eat.ru;
+	        return 301 https://$host$request_uri;
 		}
 
 		server {
-		        listen 443;
+		        listen 80;
 		        server_name "~^www\.(.*)$" ;
 		        return 301 https://$1$request_uri;
 		}
-		
+
 		server {
 			listen 443;
 			include /etc/nginx/ssl.conf;
