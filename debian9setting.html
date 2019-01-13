@@ -14,6 +14,7 @@
 			ClientAliveCountMax 5
 
 			service ssh restart
+			systemctl reload sshd
 		</li>
 		<li>
 			NODEJS
@@ -42,7 +43,7 @@
 			deb http://deb.debian.org/debian stretch-backports main contrib non-free
 			deb-src http://deb.debian.org/debian stretch-backports main contrib non-free
 			--------
-			sudo apt update
+			apt update
 			apt install python-certbot-nginx -t stretch-backports
 			systemctl reload nginx
 		</li>

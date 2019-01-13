@@ -40,7 +40,7 @@
 		</li>
 		<li>
 			создадим новый блок сервера по следующему адресу:
-			nano /etc/nginx/sites-available/mydomain.ru.conf
+			nano /etc/nginx/sites-available/about-eat.ru.conf
 			<pre>
 				server {
 				       listen 80;
@@ -74,7 +74,7 @@
 	<div>
 		<h3>Cоздадим новый блок сервера по следующему адресу:</h3>
 		<p>
-			nano /etc/nginx/sites-available/mydomain.ru.conf
+			nano /etc/nginx/sites-available/about-eat.ru.conf
 		</p>
 		<h4>Добавьте следующее содержание:</h4>
 		<p>
@@ -83,8 +83,21 @@
 			<pre>
 				ssl     on;
 				ssl_protocols           SSLv3 TLSv1;
-				ssl_certificate         /etc/letsencrypt/live/mysite.ru/fullchain.pem;
-				ssl_certificate_key     /etc/letsencrypt/live/mysite.ru/privkey.pem;
+				ssl_certificate         /etc/letsencrypt/live/about-eat.ru/fullchain.pem;
+				ssl_certificate_key     /etc/letsencrypt/live/about-eat.ru/privkey.pem;
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/about-eat.ru/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/about-eat.ru/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/about-eat.ru/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/about-eat.ru/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
 			</pre>
 		</p>
@@ -93,9 +106,9 @@
 				server {
 					listen 443;
 					include /etc/nginx/ssl.conf;
-					server_name agencytop.ru www.agencytop.ru;
+					server_name about-eat.ru www.about-eat.ru;
 					location / {
-						proxy_pass http://localhost:3777;
+						proxy_pass http://localhost:4444;
 						proxy_http_version 1.1;
 						proxy_set_header Upgrade $http_upgrade;
 						proxy_set_header Connection 'upgrade';
@@ -148,7 +161,7 @@
 				Сохраните файл. Для того, чтобы активировать блок сервера необходимо создать символьную ссылку с помощью следующей команды:
 			</h3>
 			<p>
-				ln -s /etc/nginx/sites-available/mydomain.ru.conf /etc/nginx/sites-enabled/mydomain.ru.conf
+				ln -s /etc/nginx/sites-available/about-eat.ru.conf /etc/nginx/sites-enabled/about-eat.ru.conf
 			</p>
 		</div>
 	</div>
@@ -187,7 +200,7 @@
 		</p>
 		<h3>Получение SSL-сертификата</h3>
 		<p>
-			certbot --nginx -d example.com -d www.example.com
+			certbot --nginx -d about-eat.ru -d www.about-eat.ru
 		</p>
 		<h3>Проверка автоматического обновления сертификата</h3>
 		<p>
@@ -200,30 +213,39 @@
 	<h3>Full Settings in nano /etc/nginx/sites-available/mydomain.ru.conf</h3>
 	<pre>
 		server {
-	        listen 80;
-	        server_name about-eat.ru www.about-eat.ru;
-	        return 301 https://$host$request_uri;
-		}
+                listen 80;
+                server_name about-eat.ru www.about-eat.ru;
+                return 301 https://$host$request_uri;
+}
 
-		server {
-		        listen 80;
-		        server_name "~^www\.(.*)$" ;
-		        return 301 https://$1$request_uri;
-		}
+                server {
+                        listen 80;
+                        server_name "~^www\.(.*)$" ;
+                        return 301 https://$1$request_uri;
+                }
 
-		server {
-			listen 443;
-			include /etc/nginx/ssl.conf;
-			server_name agencytop.ru;
-			location / {
-				proxy_pass http://localhost:3777;
-				proxy_http_version 1.1;
-				proxy_set_header Upgrade $http_upgrade;
-				proxy_set_header Connection 'upgrade';
-				proxy_set_header Host $host;
-				proxy_cache_bypass $http_upgrade;
-			}
-		}
+                server {
+                        gzip on;
+gzip_buffers 16 8k;
+gzip_comp_level 2;
+gzip_min_length 1024;
+gzip_types text/css text/plain text/json text/x-js text/javascript text/xml application/json application/x-javascript application/xml application/xml+rss application/javascript;
+gzip_disable "msie6";
+gzip_vary on;
+gzip_http_version 1.0;
+                        listen 443;
+                        include /etc/nginx/ssl.conf;
+                        server_name about-eat.ru;
+                        location / {
+                                proxy_pass http://localhost:4444;
+                                proxy_http_version 1.1;
+                                proxy_set_header Upgrade $http_upgrade;
+                                proxy_set_header Connection 'upgrade';
+                                proxy_set_header Host $host;
+                                proxy_cache_bypass $http_upgrade;
+                        }
+                }
+
 
 	</pre>
 	</div>
